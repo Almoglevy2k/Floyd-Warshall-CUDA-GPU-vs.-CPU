@@ -3,7 +3,8 @@
 #include <iomanip>    // For formatted output
 #include <climits>    // For INT_MAX
 #include <vector>     // For std::vector
-#include "utils.h"    // For printMatrix
+#include "utils.cpp"    // For printMatrix
+#include <chrono>  // For timing
 using std::vector;
 
 vector<vector<int>> CPU_floydWarshall(vector<vector<int>>& g, int n)
@@ -25,21 +26,32 @@ vector<vector<int>> CPU_floydWarshall(vector<vector<int>>& g, int n)
     return dist;
 }
 
-int main() {
-    int n = 4;
-    // Example graph
-    vector<vector<int>> graph = {
-        {0, 3, INT_MAX, INT_MAX},
-        {2, 0, INT_MAX, 1},
-        {INT_MAX, 7, 0, 2},
-        {INT_MAX, INT_MAX, 4, 0}
-    };
+/*int main() {
+    int n = 4;  // Change to a larger value for testing, e.g., n = 1000
 
-    // Compute the shortest distances
+    // Use predefined or random graph
+    vector<vector<int>> graph = generateRandomGraph(n);  // Replace this with a predefined graph if needed
+
+    // Print the input graph
+    std::cout << "Input Matrix:" << std::endl;
+    printMatrix(graph, n);
+
+    // Start timing
+    auto start = std::chrono::high_resolution_clock::now();
+
+    // Run Floyd-Warshall algorithm
     vector<vector<int>> result = CPU_floydWarshall(graph, n);
 
-    // Print the result outside of the function
+    // End timing
+    auto end = std::chrono::high_resolution_clock::now();
+
+    // Calculate and print the duration in milliseconds
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "CPU Execution Time: " << duration.count() << " ms" << std::endl;
+
+    // Print the result matrix
+    std::cout << "Result Matrix:" << std::endl;
     printMatrix(result, n);
 
     return 0;
-}
+}*/

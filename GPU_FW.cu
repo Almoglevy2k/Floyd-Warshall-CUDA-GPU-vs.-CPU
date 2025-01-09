@@ -1,41 +1,21 @@
 #include <iostream>
-#include <stdexcept> // For std::invalid_argument
-#include <iomanip>    // For formatted output
-#include <climits>    // For INT_MAX
-#include <vector>     // For std::vector
-#include <cuda_runtime.h>  // Include CUDA runtime functions (for malloc, memcpy, etc.)
+#include <vector>
+#include <cuda_runtime.h>  // For CUDA runtime functions
+#include "utils.cpp"         // For flattenMatrix, deflattenMatrix, generateRandomGraph, and printMatrix
+
 using std::vector;
 
 // CUDA Kernel for Floyd-Warshall
 __global__ void GPU_single_floydWarshall(int* dist, int n, int k) {
-    int i = blockIdx.x * blockDim.x + threadIdx.x;  // Global index for i
-    int j = blockIdx.y * blockDim.y + threadIdx.y;  // Global index for j
+    int i = blockIdx.x * blockDim.x + threadIdx.x;  // Global row index
+    int j = blockIdx.y * blockDim.y + threadIdx.y;  // Global column index
 
-    // Ensure we stay within bounds
-    if (dist[i * n + k] != INT_MAX && dist[k * n + j] != INT_MAX) {
-    int through_k = dist[i * n + k] + dist[k * n + j];
-    if (through_k < dist[i * n + j]) {
-        dist[i * n + j] = through_k;
-    }
- }
-}
-
-// Function to flatten the 2D matrix into a 1D array
-vector<int> flattenMatrix(const vector<vector<int>>& g, int n) {
-    vector<int> flat_dist(n * n);
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            flat_dist[i * n + j] = g[i][j];
-        }
-    }
-    return flat_dist;
-}
-
-// Function to deflate the 1D array back into a 2D matrix
-void deflattenMatrix(vector<vector<int>>& g, const vector<int>& flat_dist, int n) {
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            g[i][j] = flat_dist[i * n + j];
+    if (i < n && j < n) {  // Ensure bounds are respected
+        if (dist[i * n + k] != INT_MAX && dist[k * n + j] != INT_MAX) {
+            int through_k = dist[i * n + k] + dist[k * n + j];
+            if (through_k < dist[i * n + j]) {
+                dist[i * n + j] = through_k;
+            }
         }
     }
 }
@@ -43,7 +23,8 @@ void deflattenMatrix(vector<vector<int>>& g, const vector<int>& flat_dist, int n
 // Function to run Floyd-Warshall on the GPU
 vector<vector<int>> GPU_floydWarshall(vector<vector<int>>& g, int n) {
     // Flatten the graph for better memory access and performance
-    vector<int> flat_dist = flattenMatrix(g, n);
+    vector<int> flat_dist;  // Create an empty 1D vector
+    flattenMatrix(g, flat_dist, n);  // Flatten the 2D graph into 1D
 
     // Allocate device memory for the flattened distance matrix
     int* d_flat_dist;
@@ -69,37 +50,45 @@ vector<vector<int>> GPU_floydWarshall(vector<vector<int>>& g, int n) {
     cudaFree(d_flat_dist);
 
     // Convert the flattened matrix back to 2D
-    deflattenMatrix(g, flat_dist, n);  // Assuming deflattenMatrix converts the 1D back to 2D
+    deflattenMatrix(g, flat_dist, n);  // Convert the 1D array back into 2D
     return g;
 }
 
-// Function to print the matrix
-void printMatrix(const vector<vector<int>>& matrix, int n) {
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (matrix[i][j] == INT_MAX)
-                std::cout << "INF ";
-            else
-                std::cout << matrix[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
-}
+/*int main() {
+    int n = 4;  // Change this value for larger graphs
+    vector<vector<int>> graph = generateRandomGraph(n);  // Use the random graph generator from utils
 
-int main() {
-    int n = 4;
-    // Example graph
-    vector<vector<int>> graph = {
-        {0, 3, INT_MAX, INT_MAX},
-        {2, 0, INT_MAX, 1},
-        {INT_MAX, 7, 0, 2},
-        {INT_MAX, INT_MAX, 4, 0}
-    };
+    // Print the input graph
+    std::cout << "Input Matrix:" << std::endl;
+    printMatrix(graph, n);
 
-    // Compute the shortest distances
+    // CUDA timing setup
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
+    // Start timing
+    cudaEventRecord(start);
+
+    // Run Floyd-Warshall algorithm on the GPU
     vector<vector<int>> result = GPU_floydWarshall(graph, n);
 
-    // Print the result outside of the function
-    printMatrix(result, n);  // Assuming printMatrix prints the 2D matrix
+    // End timing
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+
+    // Calculate and print execution time
+    float milliseconds = 0;
+    cudaEventElapsedTime(&milliseconds, start, stop);
+    std::cout << "GPU Execution Time: " << milliseconds << " ms" << std::endl;
+
+    // Print the result matrix
+    std::cout << "Result Matrix:" << std::endl;
+    printMatrix(result, n);
+
+    // Cleanup
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+
     return 0;
-}
+}*/

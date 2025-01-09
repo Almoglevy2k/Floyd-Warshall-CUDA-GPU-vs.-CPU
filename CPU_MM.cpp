@@ -76,7 +76,7 @@ bool validate_result(const int *result, const int *expected, int n)
     return true;
 }
 
-int main()
+/*int main()
 {
     const int n = 3; // Define the size of the matrices (3x3 in this case)
 
@@ -126,4 +126,4 @@ int main()
         std::cerr << "Matrix multiplication failed: " << e.what() << std::endl;
         return 1; // Indicate failure
     }
-}
+}*/
