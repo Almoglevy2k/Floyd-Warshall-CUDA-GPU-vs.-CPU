@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Compile the code
-g++ -o matrix_multiply CPU_FW.cpp
+g++ -o cpu_fw_out CPU_FW.cpp
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then
     echo "Compilation successful. Running the program..."
-    ./matrix_multiply
+    ./cpu_fw_out
 else
     echo "Compilation failed."
 fi
