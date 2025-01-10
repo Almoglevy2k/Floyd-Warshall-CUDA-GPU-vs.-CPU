@@ -2,14 +2,24 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build CUDA Program",
+            "label": "build",
             "type": "shell",
             "command": "nvcc",
-            "args": ["-o", "program", "program.cu"],
+            "args": [
+                "-o",
+                "floyd_warshall_test",
+                "GPU_FW.cu",
+                "CPU_FW.cpp",
+                "Test_GPU_vs_CPU.cu",
+                "utils.cpp",
+                "-lcudart"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Generated task for building CUDA project"
         }
     ]
 }

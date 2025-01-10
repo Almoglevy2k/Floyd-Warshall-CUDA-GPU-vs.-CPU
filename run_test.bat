@@ -5,7 +5,7 @@ echo Running Test_GPU_vs_CPU.cu inside Docker...
 docker run --rm --gpus all ^
     -v C:\Users\almog\floyd-warshall-cuda:/workspace ^
     -w /workspace ^
-    nvidia/cuda:12.2.0-devel-ubuntu22.04 bash -c "nvcc -ccbin g++ -o floyd_warshall_test GPU_FW.cu CPU_FW.cpp Test_GPU_vs_CPU.cu -lcudart && ./floyd_warshall_test"
+    nvidia/cuda:12.2.0-devel-ubuntu22.04 bash -c "nvcc -ccbin g++ -o floyd_warshall_test GPU_FW.cu CPU_FW.cpp Test_GPU_vs_CPU.cu utils.cpp -lcudart && ./floyd_warshall_test"
 
 :: Check if Docker execution was successful
 if %ERRORLEVEL% neq 0 (

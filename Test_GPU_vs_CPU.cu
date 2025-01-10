@@ -1,18 +1,21 @@
-#include "GPU_FW.cu" // Header for GPU implementation
-#include "CPU_FW.cpp" // Header for CPU implementation
+#include "GPU_FW.h"  // Include GPU header
+#include "CPU_FW.h"  // Include CPU header
+#include "utils.h"  // Include the utils header where printMatrix is declared
+
 #include <iostream>
 #include <vector>
 #include <chrono>
 
 using namespace std;
 
+// Function to initialize a graph with random values
 vector<vector<int>> initializeGraph(int n) {
     vector<vector<int>> graph(n, vector<int>(n, INT_MAX));
     for (int i = 0; i < n; i++) {
-        graph[i][i] = 0; // Distance to self is 0
+        graph[i][i] = 0;  // Distance to self is 0
         for (int j = 0; j < n; j++) {
             if (i != j) {
-                graph[i][j] = rand() % 100 + 1; // Random weights for edges
+                graph[i][j] = rand() % 100 + 1;  // Random weights for edges
             }
         }
     }
@@ -21,7 +24,7 @@ vector<vector<int>> initializeGraph(int n) {
 
 vector<vector<int>> test_GPU(vector<vector<int>> graph, int n) {
     cout << "Input Matrix (GPU):" << endl;
-    printMatrix(graph, n);
+    //printMatrix(graph, n);
 
     // CUDA timing
     cudaEvent_t start, stop;
@@ -37,7 +40,7 @@ vector<vector<int>> test_GPU(vector<vector<int>> graph, int n) {
     cudaEventElapsedTime(&milliseconds, start, stop);
     cout << "GPU Execution Time: " << milliseconds << " ms" << endl;
 
-    printMatrix(result, n);
+    //printMatrix(result, n);
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
 
@@ -46,7 +49,7 @@ vector<vector<int>> test_GPU(vector<vector<int>> graph, int n) {
 
 vector<vector<int>> test_CPU(vector<vector<int>> graph, int n) {
     cout << "Input Matrix (CPU):" << endl;
-    printMatrix(graph, n);
+   // printMatrix(graph, n);
 
     auto start = chrono::high_resolution_clock::now();
     vector<vector<int>> result = CPU_floydWarshall(graph, n);
@@ -55,12 +58,12 @@ vector<vector<int>> test_CPU(vector<vector<int>> graph, int n) {
     auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
     cout << "CPU Execution Time: " << duration.count() << " ms" << endl;
 
-    printMatrix(result, n);
+    //printMatrix(result, n);
     return result;
 }
 
 int main() {
-    int n = 5; // Size of the graph
+    int n = 1000; // Size of the graph
     vector<vector<int>> graph = initializeGraph(n);
 
     // Test GPU and CPU implementations

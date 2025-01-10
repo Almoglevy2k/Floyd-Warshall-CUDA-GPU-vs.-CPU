@@ -1,7 +1,7 @@
+#include "GPU_FW.h"  // Include the header file
 #include <iostream>
-#include <vector>
-#include <cuda_runtime.h>  // For CUDA runtime functions
-#include "utils.cpp"         // For flattenMatrix, deflattenMatrix, generateRandomGraph, and printMatrix
+#include <climits>    // For INT_MAX
+#include "utils.h"    // For flattenMatrix, deflattenMatrix, and generateRandomGraph
 
 using std::vector;
 
@@ -21,7 +21,7 @@ __global__ void GPU_single_floydWarshall(int* dist, int n, int k) {
 }
 
 // Function to run Floyd-Warshall on the GPU
-vector<vector<int>> GPU_floydWarshall(vector<vector<int>>& g, int n) {
+std::vector<std::vector<int>> GPU_floydWarshall(std::vector<std::vector<int>>& g, int n) {
     // Flatten the graph for better memory access and performance
     vector<int> flat_dist;  // Create an empty 1D vector
     flattenMatrix(g, flat_dist, n);  // Flatten the 2D graph into 1D
@@ -53,42 +53,3 @@ vector<vector<int>> GPU_floydWarshall(vector<vector<int>>& g, int n) {
     deflattenMatrix(g, flat_dist, n);  // Convert the 1D array back into 2D
     return g;
 }
-
-/*int main() {
-    int n = 4;  // Change this value for larger graphs
-    vector<vector<int>> graph = generateRandomGraph(n);  // Use the random graph generator from utils
-
-    // Print the input graph
-    std::cout << "Input Matrix:" << std::endl;
-    printMatrix(graph, n);
-
-    // CUDA timing setup
-    cudaEvent_t start, stop;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
-
-    // Start timing
-    cudaEventRecord(start);
-
-    // Run Floyd-Warshall algorithm on the GPU
-    vector<vector<int>> result = GPU_floydWarshall(graph, n);
-
-    // End timing
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-
-    // Calculate and print execution time
-    float milliseconds = 0;
-    cudaEventElapsedTime(&milliseconds, start, stop);
-    std::cout << "GPU Execution Time: " << milliseconds << " ms" << std::endl;
-
-    // Print the result matrix
-    std::cout << "Result Matrix:" << std::endl;
-    printMatrix(result, n);
-
-    // Cleanup
-    cudaEventDestroy(start);
-    cudaEventDestroy(stop);
-
-    return 0;
-}*/
