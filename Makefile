@@ -1,18 +1,24 @@
-# Variables
-TARGET = matrix_multiply
-SOURCE = CPU_FW.cpp
+# Define directories
+SRC_DIR := src
+BUILD_DIR := build
 
-# Default target to compile and run
-all: build run
+# Define source files
+SRC_FILES := $(SRC_DIR)/GPU_FW.cu $(SRC_DIR)/CPU_FW.cpp $(SRC_DIR)/Test_GPU_vs_CPU.cu $(SRC_DIR)/utils.cpp
 
-# Compile the program
-build:
-	    g++ -o $(TARGET) $(SOURCE)
+# Output binary
+OUTPUT := $(BUILD_DIR)/floyd_warshall_test
 
-# Run the program
-run:
-	    ./$(TARGET)
+# Compile command
+NVCC := nvcc -ccbin g++
 
-# Clean up compiled files
+# Default target
+all: $(OUTPUT)
+
+$(OUTPUT): $(SRC_FILES)
+	$(NVCC) -o $(OUTPUT) $(SRC_FILES) -lcudart
+
+# Clean build
 clean:
-	    rm -f $(TARGET)
+	rm -rf $(BUILD_DIR)/*
+
+.PHONY: all clean
