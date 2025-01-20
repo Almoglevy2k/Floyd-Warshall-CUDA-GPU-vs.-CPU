@@ -1,20 +1,37 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "Windows",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/include"
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/include",
+                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/samples/common/inc",
+                "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/include",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.20348.0/ucrt",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.20348.0/um"
             ],
             "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
+                "__CUDACC__",
+                "__global__=__attribute__((global))",
+                "__device__=__attribute__((device))",
+                "__host__=__attribute__((host))"
             ],
-            "compilerPath": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/bin/nvcc.exe",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/HostX64/x64/cl.exe",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.6/include",
+                    "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/include",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.20348.0/ucrt",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.20348.0/um"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "compilerArgs": [
+                "-x",
+                "cu"
+            ]
         }
     ],
     "version": 4
