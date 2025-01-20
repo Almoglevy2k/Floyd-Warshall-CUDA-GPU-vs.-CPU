@@ -45,3 +45,13 @@ make
 
 ##License
 -This project is open-source and available under the MIT License.
+
+
+Output example - 
+```bash
+Input Matrix (GPU):
+GPU Execution Time: 461.785 ms
+Input Matrix (CPU):
+CPU Execution Time: 13122 ms
+GPU and CPU results match!
+```
