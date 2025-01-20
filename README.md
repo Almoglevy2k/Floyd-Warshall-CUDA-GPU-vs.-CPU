@@ -42,6 +42,7 @@ This project implements the **Floyd-Warshall algorithm** to find the shortest pa
 ```bash
 make
 ./build/floyd_warshall_test
+```
 
 ##License
 -This project is open-source and available under the MIT License.
