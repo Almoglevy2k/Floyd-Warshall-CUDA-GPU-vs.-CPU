@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "GPU_Find_Min.h"
 __global__ void FindMinKernel(const int* const current, int* const next, const int n) {
     int tid = threadIdx.x + blockIdx.x * blockDim.x;  // Global thread ID.
 
