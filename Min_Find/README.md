@@ -62,6 +62,7 @@ Test PASSED: Both CPU and GPU results match.
       Threads compare pairs of elements simultaneously.
     - **Reduction Steps:**  
       In each step, the number of elements is halved as each thread outputs the smaller of two compared values.
+      The output is then saved in a temporary array for the next iteration to work on.
     - **Iterations:**  
       These steps repeat until only one value remains – the minimum.
 - **Complexity:**
