@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Local files
+.vscode/
+open_docker.bat
